@@ -1,10 +1,15 @@
+import * as React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import App from './App'
 
 vi.mock('@/features/auth/AuthContext', () => {
-  const React = require('react')
-  const AuthContext = React.createContext(null)
+  const AuthContext = React.createContext<{
+    user: { id: string; email: string; user_metadata: object } | null
+    loading: boolean
+    signOut: () => Promise<void>
+    session: unknown
+  } | null>(null)
   const value = {
     user: { id: '1', email: 'test@example.com', user_metadata: {} },
     loading: false,
