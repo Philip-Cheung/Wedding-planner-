@@ -13,9 +13,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { format } from 'date-fns'
 import { TrendingUpIcon, TrendingDownIcon } from 'lucide-react'
 import { PlanningChart } from './PlanningChart'
+import { PlanningTimeline } from './PlanningTimeline'
 
 export function DashboardPage() {
   const { wedding, loading } = useWedding()
@@ -109,7 +111,26 @@ export function DashboardPage() {
   if (loading) {
     return (
       <div className="flex flex-1 flex-col gap-4 p-4 lg:p-6">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i}>
+              <CardHeader className="pb-2">
+                <Skeleton className="h-4 w-24" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-16" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Skeleton className="h-64 rounded-lg lg:col-span-2" />
+          <Skeleton className="h-64 rounded-lg" />
+        </div>
       </div>
     )
   }
@@ -198,7 +219,7 @@ export function DashboardPage() {
               variant="outline"
               size="sm"
               className="mt-2"
-              onClick={() => navigate('/app/planning')}
+              onClick={() => navigate('/app/planning/checklists')}
             >
               View planning
             </Button>
@@ -232,7 +253,7 @@ export function DashboardPage() {
               variant="outline"
               size="sm"
               className="mt-2"
-              onClick={() => navigate('/app/guests')}
+              onClick={() => navigate('/app/planning/guests')}
             >
               Manage guests
             </Button>
@@ -286,7 +307,12 @@ export function DashboardPage() {
         </Card>
       </div>
 
-      <PlanningChart weddingId={wedding.id} />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <PlanningChart weddingId={wedding.id} />
+        </div>
+        <PlanningTimeline weddingId={wedding.id} />
+      </div>
     </div>
   )
 }

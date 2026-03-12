@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { format } from 'date-fns'
 
 type Milestone = {
@@ -125,8 +126,15 @@ export function PlanningPage() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      <div className="p-6 space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+        <div className="space-y-4">
+          <Skeleton className="h-24 w-full rounded-lg" />
+          <Skeleton className="h-24 w-full rounded-lg" />
+        </div>
       </div>
     )
   }

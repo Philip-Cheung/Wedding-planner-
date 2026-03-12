@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 type Vendor = {
   id: string
@@ -68,8 +69,25 @@ export function VendorsPage() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      <div className="p-6 space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-40" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-6 w-24" />
+            <Skeleton className="h-4 w-48" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Skeleton className="h-10 w-full" />
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     )
   }

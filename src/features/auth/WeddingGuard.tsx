@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { Skeleton } from '@/components/ui/skeleton'
 import { useAuth } from './AuthContext'
 import { WeddingProvider } from '@/features/wedding/WeddingContext'
 
@@ -32,7 +33,10 @@ export function WeddingGuard({ children }: { children: React.ReactNode }) {
   if (hasWedding === null) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="flex flex-col items-center gap-4">
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-4 w-24" />
+        </div>
       </div>
     )
   }

@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import { FileTextIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useWedding } from '@/features/wedding/WeddingContext'
 
@@ -30,7 +31,10 @@ export function SiteHeader() {
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <FileTextIcon className="size-4 shrink-0 text-muted-foreground" />
           {loading ? (
-            <span className="text-muted-foreground">Loading...</span>
+            <div className="space-y-1">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-48" />
+            </div>
           ) : (
             <div className="min-w-0 truncate">
               <h1 className="truncate text-base font-medium">

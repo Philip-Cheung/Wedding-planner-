@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 type BudgetItem = {
   id: string
   item: string
@@ -75,8 +76,37 @@ export function BudgetPage() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      <div className="p-6 space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-24" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <Card key={i}>
+              <CardHeader className="pb-2">
+                <Skeleton className="h-4 w-20" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-24" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-6 w-28" />
+            <Skeleton className="h-4 w-32" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Skeleton className="h-10 w-full" />
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     )
   }

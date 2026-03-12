@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 type VisionBoardCategory = {
   id: string
@@ -67,8 +68,28 @@ export function VisionBoardPage() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      <div className="p-6 space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-36" />
+          <Skeleton className="h-4 w-80" />
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Card key={i}>
+              <CardHeader>
+                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-4 w-16" />
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-2">
+                  {[1, 2, 3, 4].map((j) => (
+                    <Skeleton key={j} className="aspect-square rounded" />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     )
   }
