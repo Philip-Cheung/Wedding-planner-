@@ -1,4 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
+import { useAuth } from '@/features/auth/AuthContext'
+import { Button } from '@/components/ui/button'
 
 const navItems = [
   { to: '/app/dashboard', label: 'Dashboard' },
@@ -11,6 +13,7 @@ const navItems = [
 
 export function AppShell() {
   const location = useLocation()
+  const { signOut } = useAuth()
 
   return (
     <div className="min-h-screen flex">
@@ -33,6 +36,11 @@ export function AppShell() {
             </Link>
           ))}
         </nav>
+        <div className="p-4 border-t border-border">
+          <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => signOut()}>
+            Sign out
+          </Button>
+        </div>
       </aside>
       <main className="flex-1 overflow-auto">
         <Outlet />

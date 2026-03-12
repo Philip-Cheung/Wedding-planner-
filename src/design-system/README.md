@@ -6,7 +6,7 @@ Premium, editorial, calm, consumer-friendly design language.
 
 - `tokens.ts` - Design token definitions
 - `theme.css` - CSS custom properties
-- `components/` - App-specific primitives (Button, Input, etc.)
+- UI components live in `src/components/ui/` (shadcn/ui: Button, Input, Label, Card, etc.)
 
 ## Principles
 
