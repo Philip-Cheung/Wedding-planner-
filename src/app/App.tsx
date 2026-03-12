@@ -7,8 +7,11 @@ import { WeddingGuard } from '@/features/auth/WeddingGuard'
 import { AppShell } from './AppShell'
 import { OnboardingPage } from '@/features/onboarding/OnboardingPage'
 import { DashboardPage } from '@/features/dashboard/DashboardPage'
-import { PlanningPage } from '@/features/planning/PlanningPage'
+import { ChecklistsPage } from '@/features/planning/ChecklistsPage'
 import { GuestsPage } from '@/features/guests/GuestsPage'
+import { VendorsPage } from '@/features/planning/VendorsPage'
+import { VisionBoardPage } from '@/features/planning/VisionBoardPage'
+import { BudgetPage } from '@/features/planning/BudgetPage'
 
 function AuthenticatedRedirect({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -50,8 +53,13 @@ export default function App() {
           >
             <Route index element={<Navigate to="/app/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="planning" element={<PlanningPage />} />
-            <Route path="guests" element={<GuestsPage />} />
+            <Route path="planning" element={<Navigate to="/app/planning/checklists" replace />} />
+            <Route path="planning/checklists" element={<ChecklistsPage />} />
+            <Route path="planning/guests" element={<GuestsPage />} />
+            <Route path="planning/vendors" element={<VendorsPage />} />
+            <Route path="planning/vision-board" element={<VisionBoardPage />} />
+            <Route path="planning/budget" element={<BudgetPage />} />
+            <Route path="guests" element={<Navigate to="/app/planning/guests" replace />} />
             <Route path="messages" element={<div className="p-6">Messages (coming soon)</div>} />
             <Route path="website" element={<div className="p-6">Website (coming soon)</div>} />
             <Route path="settings" element={<div className="p-6">Settings (coming soon)</div>} />

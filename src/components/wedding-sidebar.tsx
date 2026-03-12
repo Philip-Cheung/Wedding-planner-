@@ -6,6 +6,11 @@ import {
   AvatarImage,
 } from '@/components/ui/avatar'
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -24,6 +29,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
 import {
   LayoutDashboardIcon,
@@ -36,12 +44,24 @@ import {
   LogOutIcon,
   EllipsisVerticalIcon,
   CirclePlusIcon,
+  ChevronRightIcon,
+  ClipboardListIcon,
+  StoreIcon,
+  ImageIcon,
+  WalletIcon,
 } from 'lucide-react'
+
+const planningSubnav = [
+  { title: 'Checklists & Tasks', url: '/app/planning/checklists', icon: ClipboardListIcon },
+  { title: 'Guest list', url: '/app/planning/guests', icon: UsersIcon },
+  { title: 'Vendor tracker', url: '/app/planning/vendors', icon: StoreIcon },
+  { title: 'Vision board', url: '/app/planning/vision-board', icon: ImageIcon },
+  { title: 'Budget', url: '/app/planning/budget', icon: WalletIcon },
+]
 
 const navMain = [
   { title: 'Dashboard', url: '/app/dashboard', icon: <LayoutDashboardIcon /> },
-  { title: 'Planning', url: '/app/planning', icon: <ListTodoIcon /> },
-  { title: 'Guests', url: '/app/guests', icon: <UsersIcon /> },
+  { title: 'Planning', subnav: planningSubnav, icon: <ListTodoIcon /> },
   { title: 'Messages', url: '/app/messages', icon: <MailIcon /> },
   { title: 'Website', url: '/app/website', icon: <GlobeIcon /> },
 ]
@@ -92,11 +112,11 @@ export function WeddingSidebar() {
                     </SidebarMenuButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent side="right" align="start" sideOffset={4}>
-                    <DropdownMenuItem onClick={() => navigate('/app/planning')}>
+                    <DropdownMenuItem onClick={() => navigate('/app/planning/checklists')}>
                       <ListTodoIcon />
                       Add task
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/app/guests')}>
+                    <DropdownMenuItem onClick={() => navigate('/app/planning/guests')}>
                       <UsersIcon />
                       Add guest
                     </DropdownMenuItem>
@@ -107,20 +127,65 @@ export function WeddingSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarMenu>
-          {navMain.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                tooltip={item.title}
-                asChild
-                isActive={location.pathname.startsWith(item.url)}
-              >
-                <Link to={item.url}>
-                  {item.icon}
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {navMain.map((item) => {
+            if ('subnav' in item && item.subnav) {
+              const isPlanningActive = item.subnav.some(
+                (s) => location.pathname === s.url || location.pathname.startsWith(s.url + '/')
+              )
+              return (
+                <Collapsible
+                  key={item.title}
+                  asChild
+                  defaultOpen={isPlanningActive}
+                  className="group/collapsible"
+                >
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton
+                        tooltip={item.title}
+                        isActive={isPlanningActive}
+                      >
+                        {item.icon}
+                        <span>{item.title}</span>
+                        <ChevronRightIcon className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.subnav.map((sub) => (
+                          <SidebarMenuSubItem key={sub.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={location.pathname === sub.url}
+                            >
+                              <Link to={sub.url}>
+                                <sub.icon className="size-4" />
+                                <span>{sub.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              )
+            }
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  asChild
+                  isActive={location.pathname.startsWith(item.url)}
+                >
+                  <Link to={item.url}>
+                    {item.icon}
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )
+          })}
         </SidebarMenu>
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
