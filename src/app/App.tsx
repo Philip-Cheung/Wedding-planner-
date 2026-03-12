@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
+import { ConfigRequired } from '@/components/ConfigRequired'
+import { isSupabaseConfigured } from '@/lib/supabase'
 import { AuthProvider, useAuth } from '@/features/auth/AuthContext'
 import { AuthPage } from '@/features/auth/AuthPage'
 import { ProtectedRoute } from '@/features/auth/ProtectedRoute'
@@ -21,6 +23,10 @@ function AuthenticatedRedirect({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  if (!isSupabaseConfigured) {
+    return <ConfigRequired />
+  }
+
   return (
     <AuthProvider>
       <BrowserRouter>
