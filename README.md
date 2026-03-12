@@ -23,11 +23,17 @@ A personal-use wedding planner application with a clear planning journey, flexib
    ```
    Add your Supabase URL and anon key to `.env`.
 
-3. **Supabase**
+3. **Shadcn blocks** (optional – if scaffolding UI)
+   ```bash
+   npm run shadcn:dashboard
+   npm run shadcn:login
+   ```
+
+4. **Supabase**
    - Create a project at [supabase.com](https://supabase.com)
    - Run migrations: `supabase db push` (or apply `supabase/migrations/00001_initial_schema.sql` manually)
 
-4. **Run**
+5. **Run**
    ```bash
    npm run dev
    ```
@@ -38,6 +44,8 @@ A personal-use wedding planner application with a clear planning journey, flexib
 - `npm run build` - Production build
 - `npm run test:run` - Run unit tests
 - `npm run test:e2e` - Run E2E tests (Playwright)
+- `npm run shadcn:dashboard` - Add dashboard-01 block
+- `npm run shadcn:login` - Add/refresh login-02 block
 
 ## Project Structure
 

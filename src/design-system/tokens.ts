@@ -5,14 +5,14 @@
 
 export const tokens = {
   colors: {
-    background: 'hsl(var(--background))',
-    foreground: 'hsl(var(--foreground))',
-    primary: 'hsl(var(--primary))',
-    primaryForeground: 'hsl(var(--primary-foreground))',
-    muted: 'hsl(var(--muted))',
-    mutedForeground: 'hsl(var(--muted-foreground))',
-    border: 'hsl(var(--border))',
-    ring: 'hsl(var(--ring))',
+    background: 'var(--background)',
+    foreground: 'var(--foreground)',
+    primary: 'var(--primary)',
+    primaryForeground: 'var(--primary-foreground)',
+    muted: 'var(--muted)',
+    mutedForeground: 'var(--muted-foreground)',
+    border: 'var(--border)',
+    ring: 'var(--ring)',
   },
   typography: {
     fontSans: 'var(--font-sans, ui-sans-serif, system-ui, sans-serif)',

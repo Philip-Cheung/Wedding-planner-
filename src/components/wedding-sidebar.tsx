@@ -1,0 +1,199 @@
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '@/features/auth/AuthContext'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/components/ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/ui/sidebar'
+import {
+  LayoutDashboardIcon,
+  ListTodoIcon,
+  UsersIcon,
+  MailIcon,
+  GlobeIcon,
+  Settings2Icon,
+  HeartIcon,
+  LogOutIcon,
+  EllipsisVerticalIcon,
+  CirclePlusIcon,
+} from 'lucide-react'
+
+const navMain = [
+  { title: 'Dashboard', url: '/app/dashboard', icon: <LayoutDashboardIcon /> },
+  { title: 'Planning', url: '/app/planning', icon: <ListTodoIcon /> },
+  { title: 'Guests', url: '/app/guests', icon: <UsersIcon /> },
+  { title: 'Messages', url: '/app/messages', icon: <MailIcon /> },
+  { title: 'Website', url: '/app/website', icon: <GlobeIcon /> },
+]
+
+const navSecondary = [
+  { title: 'Settings', url: '/app/settings', icon: <Settings2Icon /> },
+]
+
+export function WeddingSidebar() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { user, signOut } = useAuth()
+
+  const initials = user?.user_metadata?.full_name
+    ?.split(' ')
+    .map((n: string) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2) ?? user?.email?.[0]?.toUpperCase() ?? '?'
+
+  return (
+    <Sidebar collapsible="offcanvas" variant="inset">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
+              <Link to="/app">
+                <HeartIcon className="size-5!" />
+                <span className="text-base font-semibold">Wedding Planner</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent className="flex flex-col gap-2">
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuButton
+                      tooltip="Quick Create"
+                      className="min-w-8 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
+                    >
+                      <CirclePlusIcon />
+                      <span>Quick Create</span>
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent side="right" align="start" sideOffset={4}>
+                    <DropdownMenuItem onClick={() => navigate('/app/planning')}>
+                      <ListTodoIcon />
+                      Add task
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/app/guests')}>
+                      <UsersIcon />
+                      Add guest
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarMenu>
+          {navMain.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton
+                tooltip={item.title}
+                asChild
+                isActive={location.pathname.startsWith(item.url)}
+              >
+                <Link to={item.url}>
+                  {item.icon}
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+        <SidebarGroup className="mt-auto">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navSecondary.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    asChild
+                    isActive={location.pathname.startsWith(item.url)}
+                  >
+                    <Link to={item.url}>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size="lg" className="aria-expanded:bg-muted">
+                <Avatar className="size-8 rounded-lg">
+                  <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.email} />
+                  <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">
+                    {user?.user_metadata?.full_name ?? user?.email ?? 'User'}
+                  </span>
+                  <span className="truncate text-xs text-foreground/70">{user?.email}</span>
+                </div>
+                <EllipsisVerticalIcon className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="min-w-56"
+                side="right"
+                align="end"
+                sideOffset={4}
+              >
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel className="p-0 font-normal">
+                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                      <Avatar className="size-8">
+                        <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.email} />
+                        <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+                      </Avatar>
+                      <div className="grid flex-1 text-left text-sm leading-tight">
+                        <span className="truncate font-medium">
+                          {user?.user_metadata?.full_name ?? user?.email ?? 'User'}
+                        </span>
+                        <span className="truncate text-xs text-muted-foreground">{user?.email}</span>
+                      </div>
+                    </div>
+                  </DropdownMenuLabel>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => signOut()}>
+                  <LogOutIcon />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
+  )
+}

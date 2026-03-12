@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/features/auth/AuthContext'
 import { AuthPage } from '@/features/auth/AuthPage'
 import { ProtectedRoute } from '@/features/auth/ProtectedRoute'
+import { WeddingGuard } from '@/features/auth/WeddingGuard'
 import { AppShell } from './AppShell'
 import { OnboardingPage } from '@/features/onboarding/OnboardingPage'
 import { DashboardPage } from '@/features/dashboard/DashboardPage'
@@ -41,7 +42,9 @@ export default function App() {
             path="/app"
             element={
               <ProtectedRoute>
-                <AppShell />
+                <WeddingGuard>
+                  <AppShell />
+                </WeddingGuard>
               </ProtectedRoute>
             }
           >
