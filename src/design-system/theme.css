@@ -1,0 +1,9 @@
+/**
+ * Design system theme variables
+ * Import this after Tailwind base in your main CSS
+ */
+
+:root {
+  --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: ui-serif, Georgia, 'Times New Roman', serif;
+}
