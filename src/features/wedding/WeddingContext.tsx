@@ -55,13 +55,11 @@ export function WeddingProvider({ children, initialWeddingId, initialWedding }: 
     }
 
     let weddingToUse = initialWedding
-    let gotFromStorage = false
     if (!weddingToUse) {
       try {
         const stored = sessionStorage.getItem('wedding_just_created')
         if (stored) {
           weddingToUse = JSON.parse(stored) as Wedding
-          gotFromStorage = true
         }
       } catch {
         /* ignore */
