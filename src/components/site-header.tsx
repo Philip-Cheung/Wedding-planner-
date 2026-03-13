@@ -1,13 +1,16 @@
+import { useState } from 'react'
 import { format } from 'date-fns'
-import { FileTextIcon } from 'lucide-react'
+import { FileTextIcon, Share2Icon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useWedding } from '@/features/wedding/WeddingContext'
+import { ShareWeddingDialog } from '@/features/sharing/ShareWeddingDialog'
 
 export function SiteHeader() {
   const { wedding, loading } = useWedding()
+  const [shareOpen, setShareOpen] = useState(false)
 
   const subtitle = wedding
     ? [
@@ -49,16 +52,17 @@ export function SiteHeader() {
           )}
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a
-              href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="dark:text-foreground"
-            >
-              GitHub
-            </a>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hidden sm:flex gap-2"
+            onClick={() => setShareOpen(true)}
+            disabled={!wedding}
+          >
+            <Share2Icon className="size-4" />
+            Share
           </Button>
+          <ShareWeddingDialog open={shareOpen} onOpenChange={setShareOpen} />
         </div>
       </div>
     </header>

@@ -14,6 +14,9 @@ import { GuestsPage } from '@/features/guests/GuestsPage'
 import { VendorsPage } from '@/features/planning/VendorsPage'
 import { VisionBoardPage } from '@/features/planning/VisionBoardPage'
 import { BudgetPage } from '@/features/planning/BudgetPage'
+import { InviteAcceptPage } from '@/features/sharing/InviteAcceptPage'
+import { SettingsPage } from '@/features/settings/SettingsPage'
+import { InviteLinkPage } from '@/features/sharing/InviteLinkPage'
 
 function AuthenticatedRedirect({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -68,8 +71,10 @@ export default function App() {
             <Route path="guests" element={<Navigate to="/app/planning/guests" replace />} />
             <Route path="messages" element={<div className="p-6">Messages (coming soon)</div>} />
             <Route path="website" element={<div className="p-6">Website (coming soon)</div>} />
-            <Route path="settings" element={<div className="p-6">Settings (coming soon)</div>} />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
+          <Route path="/invite/accept" element={<InviteAcceptPage />} />
+          <Route path="/invite/link/:token" element={<InviteLinkPage />} />
           <Route path="/" element={<Navigate to="/app" replace />} />
           <Route path="*" element={<Navigate to="/app" replace />} />
         </Routes>

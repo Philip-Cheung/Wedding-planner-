@@ -27,27 +27,89 @@ type WeddingContextValue = {
 
 const WeddingContext = createContext<WeddingContextValue | null>(null)
 
-export function WeddingProvider({ children }: { children: ReactNode }) {
+type WeddingProviderProps = { children: ReactNode; initialWeddingId?: string; initialWedding?: Wedding | null }
+
+export function WeddingProvider({ children, initialWeddingId, initialWedding }: WeddingProviderProps) {
   const { user } = useAuth()
-  const [wedding, setWedding] = useState<Wedding | null>(null)
-  const [loading, setLoading] = useState(true)
+  const getInitialWedding = (): Wedding | null => {
+    if (initialWedding?.id) return initialWedding
+    try {
+      const stored = sessionStorage.getItem('wedding_just_created')
+      if (stored) return JSON.parse(stored) as Wedding
+    } catch {
+      /* ignore */
+    }
+    return null
+  }
+  const [wedding, setWedding] = useState<Wedding | null>(getInitialWedding)
+  const [loading, setLoading] = useState(!getInitialWedding())
 
   const load = useCallback(async () => {
     if (!user) {
-      setWedding(null)
+      const fromStorage = getInitialWedding()
+      if (!fromStorage) {
+        setWedding(null)
+      }
       setLoading(false)
       return
     }
 
-    const { data: weddings } = await supabase
-      .from('weddings')
-      .select('*')
-      .or(`owner_user_id.eq.${user.id},co_planner_user_id.eq.${user.id}`)
-      .limit(1)
+    let weddingToUse = initialWedding
+    let gotFromStorage = false
+    if (!weddingToUse) {
+      try {
+        const stored = sessionStorage.getItem('wedding_just_created')
+        if (stored) {
+          weddingToUse = JSON.parse(stored) as Wedding
+          gotFromStorage = true
+        }
+      } catch {
+        /* ignore */
+      }
+    }
 
-    setWedding(weddings?.[0] ?? null)
+    if (weddingToUse && weddingToUse.id) {
+      setWedding(weddingToUse)
+      setLoading(false)
+      // Do not clear sessionStorage here; clear only after we've confirmed from the backend (below)
+      // so a refresh shortly after onboarding can still recover the wedding from storage.
+      return
+    }
+
+    if (initialWeddingId) {
+      const { data } = await supabase.from('weddings').select('*').eq('id', initialWeddingId).single()
+      if (data) {
+        setWedding(data as Wedding)
+        setLoading(false)
+        try {
+          sessionStorage.removeItem('wedding_just_created')
+        } catch {
+          /* ignore */
+        }
+        return
+      }
+    }
+
+    const { data: weddings } = await supabase.rpc('get_primary_wedding_for_user', {
+      p_user_id: user.id,
+    })
+
+    const fetched = Array.isArray(weddings) && weddings[0] ? weddings[0] : null
+    if (fetched) {
+      setWedding(fetched)
+      try {
+        sessionStorage.removeItem('wedding_just_created')
+      } catch {
+        /* ignore */
+      }
+    } else {
+      const fromStorage = getInitialWedding()
+      if (!fromStorage) {
+        setWedding(null)
+      }
+    }
     setLoading(false)
-  }, [user?.id])
+  }, [user?.id, initialWeddingId, initialWedding])
 
   useEffect(() => {
     load()

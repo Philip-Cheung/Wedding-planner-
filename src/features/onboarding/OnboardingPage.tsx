@@ -44,7 +44,11 @@ export function OnboardingPage() {
   }
 
   const handleBack = () => {
-    if (step > 0) setStep((s) => s - 1)
+    if (step > 0) {
+      setStep((s) => s - 1)
+    } else {
+      navigate('/app', { state: { fromOnboardingCancel: true }, replace: true })
+    }
   }
 
   const handleSubmit = async () => {
@@ -53,18 +57,24 @@ export function OnboardingPage() {
     setError(null)
 
     try {
-      await supabase.from('weddings').insert({
+      const { data: inserted, error: insertError } = await supabase.from('weddings').insert({
         owner_user_id: user.id,
-        wedding_name: form.weddingName || null,
-        partner_name: form.partnerName || null,
+        wedding_name: (form.weddingName || '').trim() || null,
+        partner_name: (form.partnerName || '').trim() || null,
         wedding_date: form.weddingDate || null,
-        location_city: form.locationCity || null,
+        location_city: (form.locationCity || '').trim() || null,
         estimated_guest_count: form.estimatedGuestCount
           ? parseInt(form.estimatedGuestCount, 10)
           : null,
         planning_status: 'draft',
-      })
+      }).select('*').single()
 
+      if (insertError) throw insertError
+      try {
+        sessionStorage.setItem('wedding_just_created', JSON.stringify(inserted))
+      } catch {
+        /* ignore */
+      }
       navigate('/app/dashboard', { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create wedding')
@@ -155,8 +165,8 @@ export function OnboardingPage() {
               )}
 
               <div className="flex justify-between gap-4 pt-2">
-                <Button variant="outline" onClick={handleBack} disabled={step === 0}>
-                  Back
+                <Button variant="outline" onClick={handleBack}>
+                  {step === 0 ? 'Cancel' : 'Back'}
                 </Button>
                 <Button onClick={handleNext} disabled={loading}>
                   {loading ? 'Creating...' : isLastStep ? 'Create wedding' : 'Next'}

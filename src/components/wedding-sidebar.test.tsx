@@ -30,8 +30,8 @@ describe('WeddingSidebar', () => {
 
     expect(screen.getByRole('link', { name: /wedding planner/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /dashboard/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /planning/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /guests/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /planning/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /settings/i })).toBeInTheDocument()
   })
 
   it('renders Quick Create button', () => {
